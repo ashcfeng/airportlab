@@ -34,6 +34,10 @@ int main()
             newData.longitude = atof(cNum);
             infile.getline(cNum, 256, ',');
             newData.latitude = atof(cNum);
+            getline(infile, l, ',');
+          getline(infile, l, ',');
+          getline(infile, l, ',');
+          infile.getline(newData.region, 256, ',');
             getline(infile, l, '\n');
             if (strcmp(newData.code, "KAUS") == 0) {
               austinAirport = c;
@@ -63,9 +67,13 @@ int main()
         LinkedList::node* nearbyHead = a.getFirst();
         int nearbyAirports = 0;
         while (nearbyHead != NULL) {
+          //cout << "distance: " << nearbyHead->distance << endl;
           if (strcmp(nearbyHead->data.code, "KAUS") != 0 && nearbyHead->distance <= 160.934) {
-            cout << nearbyHead->data.code << " distance: " << nearbyHead->distance << endl;
-            nearbyAirports++;
+            //if (strcmp(nearbyHead->data.type, "airport") == 0 || strcmp(nearbyHead->data.type, "small_airport") == 0) {
+              cout << nearbyHead->data.code << endl;
+              nearbyAirports++;
+            //}
+            //cout << nearbyHead->data.type << endl;
           }
           nearbyHead = nearbyHead->next;
         }
@@ -113,7 +121,10 @@ double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d) {
 void getDistance(LinkedList a, Airport austin) {
   LinkedList::node* head = a.getFirst();
   while (head != NULL) {
-    head->distance = distanceEarth(head->data.longitude, head->data.latitude, austin.longitude, austin.latitude);
+    head->distance = distanceEarth(head->data.latitude, head->data.longitude, austin.latitude, austin.longitude);
+    if (head->distance <= 160.934) {
+      //cout << "get distance: " << head->data.code << " " << head->distance << endl;
+    }
     head = head->next;
   }
 }
